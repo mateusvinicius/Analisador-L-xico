@@ -1,5 +1,8 @@
 # Analisador Léxico
 
+Aluno:Mateus Vinicius Luz Da Silva 
+Matricula : 152030413
+
 Lista de símbolos:
 "for step sqrt if else return print read to num string " ( ) { } = > < + - * / %"
 
