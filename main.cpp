@@ -7,7 +7,7 @@
 
 
 using namespace std;
-enum lextype
+enum lexTipo
 {
 	palavra,
 	numero,
@@ -16,13 +16,13 @@ enum lextype
 };
 struct lexLista
 {
-	enum lextype tipo;
+	enum lexTipo tipo;
 	char *value;
 	int pos;
 	lexLista *next;
 };
 
-const char *enum_to_str(enum lextype type)
+const char *enum_to_str(enum lexTipo type)
 {
 	switch (type)
 	{
@@ -46,9 +46,9 @@ int str_len(const char *str)
 	return i;
 }
 
-class Lexic
+class Lexico
 {
-	enum states
+	enum estados
 	{
 		N,
 		H,
@@ -62,24 +62,24 @@ class Lexic
 		CBE
 	};
 	int counter;
-	enum states condition;
+	enum estados condicao;
 	char buf;
 	int err_pos;
 	lexLista *current, *list;
-	bool IsSep(const char c);
-	bool IsLetter(const char c);
-	bool IsNum(const char c);
-	void AddSymToList(char c);
-	void MakeNewList(char c);
+	bool IsSimbolo(const char c);
+	bool IsLetra(const char c);
+	bool Numero(const char c);
+	void AddSimboloALista(char c);
+	void CriarNovalista(char c);
 	void BuffStep();
-	void NextList(enum states state, char c);
+	void ProximoDaLista(enum estados state, char c);
 
 public:
 	bool AskForState();
 	int AskForLine();
-	Lexic();
-	~Lexic() {}
-	void Analyse(char c);
+	Lexico();
+	~Lexico() {}
+	void Analise(char c);
 	void Print();
 	lexLista *GetList() { return list; }
 };
@@ -90,19 +90,19 @@ struct Error
 	char *value;
 };
 
-int Lexic::AskForLine()
+int Lexico::AskForLine()
 {
 	return counter;
 }
-bool Lexic::AskForState()
+bool Lexico::AskForState()
 {
-	if (condition == H || condition == CL || condition == CB || condition == CBE)
+	if (condicao == H || condicao == CL || condicao == CB || condicao == CBE)
 		return true;
 	else
 		return false;
 }
 
-bool Lexic::IsSep(const char c)
+bool Lexico::IsSimbolo(const char c)
 {
 	char mas[] = " \t\n+=-*/%,:><{}()";
 	int i = 0;
@@ -114,7 +114,7 @@ bool Lexic::IsSep(const char c)
 	}
 	return false;
 }
-bool Lexic::IsLetter(const char c)
+bool Lexico::IsLetra(const char c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 	{
@@ -122,7 +122,7 @@ bool Lexic::IsLetter(const char c)
 	}
 	return false;
 }
-bool Lexic::IsNum(const char c)
+bool Lexico::Numero(const char c)
 {
 	if (c >= '0' && c <= '9')
 		return true;
@@ -135,29 +135,29 @@ int str_size(const char *str)
 		i++;
 	return i;
 }
-void Lexic::NextList(enum states state, char c)
+void Lexico::ProximoDaLista(enum estados state, char c)
 {
-	condition = state;
-	MakeNewList(c);
+	condicao = state;
+	CriarNovalista(c);
 }
-Lexic::Lexic()
+Lexico::Lexico()
 {
-	condition = H;
+	condicao = H;
 	counter = 1;
 	buf = '\0';
 	list = NULL;
 	current = list;
 }
-void Lexic::BuffStep()
+void Lexico::BuffStep()
 {
 	if (buf != '\0')
 	{
 		char tmp = buf;
 		buf = '\0';
-		Analyse(tmp);
+		Analise(tmp);
 	}
 }
-void Lexic::AddSymToList(char c)
+void Lexico::AddSimboloALista(char c)
 {
 	char *str, *newstr;
 	str = current->value;
@@ -169,7 +169,7 @@ void Lexic::AddSymToList(char c)
 	newstr[n + 1] = '\0';
 	current->value = newstr;
 }
-void Lexic::MakeNewList(char c)
+void Lexico::CriarNovalista(char c)
 {
 	lexLista *elem = new lexLista;
 	elem->next = NULL;
@@ -177,7 +177,7 @@ void Lexic::MakeNewList(char c)
 	elem->value[0] = c;
 	elem->value[1] = '\0';
 	elem->pos = counter;
-	switch (condition)
+	switch (condicao)
 	{
 	case N:
 		elem->tipo = numero;
@@ -201,114 +201,114 @@ void Lexic::MakeNewList(char c)
 	current = current->next;
 }
 
-void Lexic::Analyse(char c)
+void Lexico::Analise(char c)
 {
-	switch (condition)
+	switch (condicao)
 	{
 	case H:
 		if (c == '/')
-			condition = C;
+			condicao = C;
 		else if (c == '\n')
 			counter++;
-		else if (IsNum(c))
-			NextList(N, c);
-		else if (IsLetter(c))
-			NextList(K, c);
+		else if (Numero(c))
+			ProximoDaLista(N, c);
+		else if (IsLetra(c))
+			ProximoDaLista(K, c);
 		else if ((c == '=' || c == '>' || c == '<'))
-			NextList(A, c);
+			ProximoDaLista(A, c);
 		else if (c == '"')
-			NextList(S, '\0');
+			ProximoDaLista(S, '\0');
 		else if ((c == ' ') || (c == '\t'))
 		{
 			;
 		}
 		else
-			NextList(H, c);
+			ProximoDaLista(H, c);
 		break;
 	case N:
-		if (IsNum(c))
+		if (Numero(c))
 		{
-			AddSymToList(c);
+			AddSimboloALista(c);
 		}
-		else if (IsSep(c))
+		else if (IsSimbolo(c))
 		{
-			condition = H;
+			condicao = H;
 			buf = c;
 		}
 		else
 		{
 			//printf("'%c'\n", c);
-			condition = E;
+			condicao = E;
 			err_pos = counter;
 		}
 		break;
 	case K:
-		if (IsLetter(c))
-			AddSymToList(c);
+		if (IsLetra(c))
+			AddSimboloALista(c);
 		else
 		{
-			condition = H;
+			condicao = H;
 			buf = c;
 		}
 		break;
 	case S:
 		if (c != '"')
-			AddSymToList(c);
+			AddSimboloALista(c);
 		else
 		{
-			condition = H;
+			condicao = H;
 		}
 		break;
 	case A:
 		if (c == '=')
-			AddSymToList(c);
+			AddSimboloALista(c);
 		else
 		{
 			current->tipo = separador;
-			condition = H;
+			condicao = H;
 			buf = c;
 		}
 		break;
 	case C:
 		if (c == '*')
 		{
-			condition = CB;
+			condicao = CB;
 			break;
 		}
 		if (c == '/')
-			condition = CL;
+			condicao = CL;
 		else
 		{
 			buf = c;
-			condition = H;
+			condicao = H;
 		}
 		break;
 	case CB:
 		if (c == '*')
-			condition = CBE;
+			condicao = CBE;
 		break;
 	case CBE:
 		if (c == '/')
 		{
-			condition = H;
+			condicao = H;
 		}
 		else
-			condition = CB;
+			condicao = CB;
 		break;
 	case CL:
 		if (c == '\n')
 		{
-			condition = H;
+			condicao = H;
 			buf = c;
 		}
 		break;
 	case E:
-		condition = E;
+		condicao = E;
 	}
 	BuffStep();
 }
 
-void Lexic::Print()
+void Lexico::Print()
 {
 	lexLista *cur = list;
 	while (cur)
@@ -395,7 +395,7 @@ void Sintatica::analise()
 int main(int argc, char **argv)
 {
 	FILE *fd;
-	Lexic lexic;
+	Lexico Lexico;
 	char c;
 	setlocale(LC_ALL, "Portuguese");
 	if (argc != 2)
@@ -412,19 +412,19 @@ int main(int argc, char **argv)
 
 	while ((c = fgetc(fd)) != EOF)
 	{
-		lexic.Analyse(c);
+		Lexico.Analise(c);
 	}
 	fclose(fd);
 
-	if (!lexic.AskForState())
+	if (!Lexico.AskForState())
 	{
-		printf("ERRO:Erro to tipo lexico na linha %d\n", lexic.AskForLine());
+		printf("ERRO:Erro to tipo Lexico na linha %d\n", Lexico.AskForLine());
 		//exit(1);
 	}else{
 		printf("-Analise léxica valida ! \n");
 	}
 
-	Sintatica sin(lexic.GetList());
+	Sintatica sin(Lexico.GetList());
 
 	sin.analise();
 
