@@ -71,18 +71,19 @@ Saida do codigo valido :
 ```
 Saida do codigo invalido :
 ```
+ERRO:Erro to tipo Lexico na linha 5
 -Error Sintatico-linha:3: A palavra resultado nÃ£o Ã© uma palavra reservada e nem uma variavel.
--Error Sintatico-linha:5: A palavra O nÃ£o Ã© uma palavra reservada e nem uma variavel. 
+-Error Sintatico-linha:5: A palavra O nÃ£o Ã© uma palavra reservada e nem uma variavel.
 -Error Sintatico-linha:5: A palavra um nÃ£o Ã© uma palavra reservada e nem uma variavel.
--Error Sintatico-linha:5: A palavra n nÃ£o Ã© uma palavra reservada e nem uma variavel. 
--Error Sintatico-linha:5: A palavra mero nÃ£o Ã© uma palavra reservada e nem uma variavel.
--Error Sintatico-linha:5: A palavra primo nÃ£o Ã© uma palavra reservada e nem uma variavel. 
--Error Sintatico-linha:5: A palavra O nÃ£o Ã© uma palavra reservada e nem uma variavel.
--Error Sintatico-linha:5: A palavra N nÃ£o Ã© uma palavra reservada e nem uma variavel. 
--Error Sintatico-linha:5: A palavra O nÃ£o Ã© uma palavra reservada e nem uma variavel.
--Error Sintatico-linha:5: A palavra um nÃ£o Ã© uma palavra reservada e nem uma variavel. 
 -Error Sintatico-linha:5: A palavra n nÃ£o Ã© uma palavra reservada e nem uma variavel.
--Error Sintatico-linha:5: A palavra mero nÃ£o Ã© uma palavra reservada e nem uma variavel. 
+-Error Sintatico-linha:5: A palavra mero nÃ£o Ã© uma palavra reservada e nem uma variavel.
+-Error Sintatico-linha:5: A palavra primo nÃ£o Ã© uma palavra reservada e nem uma variavel.
+-Error Sintatico-linha:5: A palavra O nÃ£o Ã© uma palavra reservada e nem uma variavel.
+-Error Sintatico-linha:5: A palavra N nÃ£o Ã© uma palavra reservada e nem uma variavel.
+-Error Sintatico-linha:5: A palavra O nÃ£o Ã© uma palavra reservada e nem uma variavel.
+-Error Sintatico-linha:5: A palavra um nÃ£o Ã© uma palavra reservada e nem uma variavel.
+-Error Sintatico-linha:5: A palavra n nÃ£o Ã© uma palavra reservada e nem uma variavel.
+-Error Sintatico-linha:5: A palavra mero nÃ£o Ã© uma palavra reservada e nem uma variavel.
 -Error Sintatico-linha:5: A palavra primo nÃ£o Ã© uma palavra reservada e nem uma variavel.
 ```
 
